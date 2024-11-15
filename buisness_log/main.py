@@ -1,16 +1,12 @@
 from datetime import datetime
-from fastapi import FastAPI,HTTPException,JSONResponse
+from fastapi import FastAPI,HTTPException
 from fastapi.params import Depends
 from pydantic import EmailStr
-from fastapi.middleware.cors import CORSMiddleware
 from redis.asyncio import Redis
-from redis.sentinel import Sentinel
-from redis.exceptions import RedisError
 from sqlalchemy import select
 from sqlalchemy
 from buisness_log.auth import create_jwt_token
 import tables.py
-from buisness_log.pydantic_models import AdminPydantic,BrokerUserPydantic,AssetPydantic,PersonalWalletPydantic,Resultofwallet, UserIn
 import models
 import buisness_log.pydantic_models as pydantic_models
 from buisness_log.auth import get_user_from_token
@@ -96,7 +92,18 @@ async def get_user_wallet_by_user_id(user_id:str = Depends(get_user_from_token))
             return pydantic_models.PersonalWalletPydantic(**user_wallet.__dict__)
         else:
             raise HTTPException(status_code=404, detail="User wallet not found, Did you call /login first?")
+        
 
+@app.get('/asset_data')
+async def asset_data(asset_name:str):
+    return await GetterBinance.get_current_price(asset_name)
+
+
+@app.post('/transaction')
+async def transaction(user_id:str = Depends(get_user_from_token), asset_name:str, amount:int , transaction_type:Literal['buy','sell','short','close_short']):
+    user_wallet = await get_user_wallet_by_user_id(user_id)
+    user_wallet.work_with_assets(user_id,amount,asset_name,transaction_type)
+    return {"status":"success"}
 
 
 if __name__ == "__main__":

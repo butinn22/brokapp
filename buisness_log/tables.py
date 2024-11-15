@@ -1,9 +1,7 @@
 from sqlalchemy import MetaData,Table,Column,Integer,String,DateTime,Boolean,Float,JSON,ForeignKey
 from sqlalchemy.ext.asyncio import create_async_engine,AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from asyncio import run,gather
-from datetime import datetime
-import asyncpg
+from asyncio import run
 from baseenter import data_for_enter
 
 Base = declarative_base()

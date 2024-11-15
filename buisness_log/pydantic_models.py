@@ -1,6 +1,6 @@
 from datetime import datetime
-from fastapi import HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException # for custom exceptions 
+from fastapi.responses import JSONResponse # for custom exceptions json response
 from pydantic import BaseModel,EmailStr, validator,constr
 
 

@@ -4,11 +4,7 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 import uuid
 from __future__ import annotations
-from httpx import AsyncClient
-import hashlib
-import asyncio
-
-from sqlalchemy import RootTransaction, Transaction
+from httpx import AsyncClient()
 
 
 class CommonUser():
@@ -153,9 +149,9 @@ class PersonalWallet(Wallet):
     
     def work_with_assets(self, user_id: str, amount: int, asset_name: str, action: str, wallet_id: str):
         transactions = {
-            "buy": Transaction(),
+            "buy": BuyTransaction(),
             "sell": SellTransaction(), 
-            "short": RootTransaction(),
+            "short": ShortTransaction(),
             "close_short": CloseShortTransaction()
         }
         
